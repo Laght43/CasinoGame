@@ -1,0 +1,5 @@
+<resources>
+    <style name="Theme.CasinoGame" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+    </style>
+</resources>
