@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.input.KeyboardType
+
 import com.vadim.casinogame.ui.theme.CasinoGameTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,6 +36,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CasinoGameTheme {
+                val context = androidx.compose.ui.platform.LocalContext.current
+                game.load(context)
                 MainScreen()
             }
         }
@@ -47,6 +50,7 @@ val game = CasinoViewModel()
 @Composable
 fun MainScreen() {
     val activity = LocalActivity.current as ComponentActivity
+    val context = androidx.compose.ui.platform.LocalContext.current
     var text by remember { mutableStateOf("") }
 
     Box(modifier = Modifier
@@ -54,7 +58,9 @@ fun MainScreen() {
         .systemBarsPadding()
     ) {
         Button (
-            onClick = {activity.finish()},
+            onClick = {
+                game.save(context)
+                activity.finish()},
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .navigationBarsPadding()
@@ -63,7 +69,9 @@ fun MainScreen() {
             Text ("Exit")
         }
         Button (
-            onClick = { game.restart() },
+            onClick = {
+                game.restart()
+                game.save(context)},
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .navigationBarsPadding()
@@ -108,23 +116,33 @@ fun MainScreen() {
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Button (
-                        onClick = { game.allIn() },
+                        onClick = {
+                            game.allIn()
+                            game.save(context)},
                         modifier = Modifier.padding(horizontal = 4.dp)
                     ) { Text("All in") }
                     Button(
-                        onClick = { game.double() },
+                        onClick = {
+                            game.double()
+                            game.save(context)},
                         modifier = Modifier.padding(horizontal = 4.dp)
                     ) { Text("Double last bet") }
                     Button(
-                        onClick = { game.halfBalance() },
+                        onClick = {
+                            game.halfBalance()
+                            game.save(context)},
                         modifier = Modifier.padding(horizontal = 4.dp)
                     ) { Text("Half Balance") }
                     Button(
-                        onClick = { game.enterBet(text)},
+                        onClick = {
+                            game.enterBet(text)
+                            game.save(context)},
                         modifier = Modifier.padding(horizontal = 4.dp)
                     ) { Text("Enter your bet") }
                     Button(
-                        onClick = {game.enterChance(text)},
+                        onClick = {
+                            game.enterChance(text)
+                            game.save(context)},
                         modifier = Modifier.padding(horizontal = 4.dp)
                     ) { Text("Enter chance for win") }
                 }

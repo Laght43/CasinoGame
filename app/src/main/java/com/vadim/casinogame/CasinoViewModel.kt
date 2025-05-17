@@ -1,26 +1,34 @@
 package com.vadim.casinogame
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import kotlin.random.Random
-import com.google.gson.Gson
 import java.io.File
 
 class CasinoViewModel: ViewModel() {
     var balance by mutableIntStateOf(100)
-        private set
     var bet = 0
     var chance by mutableDoubleStateOf(50.0)
     var double = 0
     val precise = 10000
-        private
 
+    fun save(context: Context) {
+        val file = File(context.filesDir, "game_data.txt")
+        val content = "$balance;$chance"
+        file.writeText(content)
+    }
 
-    fun save() {
-
+    fun load(context: Context) {
+        val file = File(context.filesDir, "game_data.txt")
+        if (file.exists()) {
+            val parts = file.readText().split(";")
+            balance = parts[0].toInt()
+            chance = parts[1].toDouble()
+        }
     }
 
     fun checkWin() {
